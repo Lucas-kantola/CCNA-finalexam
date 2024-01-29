@@ -56,7 +56,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const quizContainer = document.getElementById('quiz-container');
         quizQuestions = shuffleArray(quizQuestions);
 
-        let currentQuestionIndex = 0;
+        var currentQuestionIndex = 0;
 
         function displayQuestion() {
             const question = quizQuestions[currentQuestionIndex];
@@ -131,6 +131,8 @@ document.addEventListener("DOMContentLoaded", function () {
             nextButton.addEventListener('click', function () {
                 correctionElement.remove();
                 displayQuestion();
+                currentQuestionIndex++;
+                submit.disabled = false
             });
 
             quizContainer.appendChild(nextButton);
