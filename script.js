@@ -1,11 +1,14 @@
 document.addEventListener("DOMContentLoaded", function () {
-    const questions = extractQuestions();
-    createQuiz(questions);
+    extractQuestions().then(questions => {
+        createQuiz(questions);
+    });
 
-    function extractQuestions() {
+    async function extractQuestions() {
+        const text = await fetch('questions.html').then(res => res.text());
+        const questionsDocument = new DOMParser().parseFromString(text.toString() ?? '', 'text/html');
+        const questionContainers = questionsDocument.querySelectorAll('#questions > p');
+
         const questions = [];
-        const questionContainers = document.querySelectorAll('.thecontent > p');
-
         questionContainers.forEach((questionContainer) => {
             const questionTextElement = questionContainer.querySelector('strong');
             if (!questionTextElement) {
@@ -34,7 +37,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 const optionText = optionElement.textContent.trim();
                 options.push(optionText);
 
-                if (optionElement.querySelector('span[style="color: #ff0000;"]')) {
+                if (optionElement.querySelector('span[correctOption]')) {
                     correctAnswers.push(optionText);
                 }
             });
@@ -74,6 +77,7 @@ document.addEventListener("DOMContentLoaded", function () {
             });
 
             const optionsListElement = document.createElement('ul');
+            optionsListElement.classList.add('options');
             const isMultipleCorrect = question.correctAnswers.length > 1;
 
             question.options.forEach((option, index) => {
@@ -94,7 +98,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             const submitButton = document.createElement('button');
             submitButton.textContent = 'Submit Answer';
-            submitButton.setAttribute("id", "sub")
+            submitButton.setAttribute("type", "submit")
             submitButton.addEventListener('click', function () {
                 checkAnswer(question);
             });
@@ -106,23 +110,37 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         function checkAnswer(question) {
-            const selectedOption = document.querySelector('input[name="options"]:checked');
-            const selectedAnswer = selectedOption ? selectedOption.value : null;
+            const selectedOptions = Array.from(document.querySelectorAll('input[name="options"]:checked')).map(el => el.value);
 
-            const submit = document.getElementById("sub")
             const correctionElement = document.createElement('div');
             correctionElement.classList.add('correction');
 
-            if (selectedAnswer && question.correctAnswers.includes(selectedAnswer)) {
+            var answeredCorrectly = selectedOptions.length === question.correctAnswers.length
+                && selectedOptions.every((el, i) => el === question.correctAnswers[i]);
+            if (answeredCorrectly) {
                 correctionElement.textContent = 'Correct!';
                 correctionElement.style.color = '#4caf50';
-                submit.disabled = true
             } else {
-                correctionElement.textContent = 'Incorrect. The correct answers are: ' + question.correctAnswers.join(', ');
+                correctionElement.textContent = question.correctAnswers.length == 1
+                    ? 'Incorrect. The correct answer is: ' + question.correctAnswers[0]
+                    : 'Incorrect. The correct answers are: ' + question.correctAnswers.join(', ');
                 correctionElement.style.color = '#f44336';
                 correctionElement.style.margin = "10px"
-                submit.disabled = true
             }
+            const options = document.querySelectorAll('input[name="options"]');
+            options.forEach(el => {
+                if (question.correctAnswers.includes(el.value)) {
+                    el.classList.add('correct');
+                } else if (selectedOptions.includes(el.value)) {
+                    el.classList.add('wrong');
+                }
+            });
+
+            const submitButton = document.querySelector('button[type=submit]');
+            submitButton.disabled = true;
+            document.querySelectorAll('input[name="options"]').forEach(option => {
+                option.disabled = true
+            });
 
             quizContainer.appendChild(correctionElement);
 
@@ -130,9 +148,8 @@ document.addEventListener("DOMContentLoaded", function () {
             nextButton.textContent = 'Next Question';
             nextButton.addEventListener('click', function () {
                 correctionElement.remove();
-                displayQuestion();
                 currentQuestionIndex++;
-                submit.disabled = false
+                displayQuestion();
             });
 
             quizContainer.appendChild(nextButton);
