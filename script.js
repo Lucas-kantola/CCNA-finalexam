@@ -133,8 +133,8 @@ document.addEventListener("DOMContentLoaded", function () {
             nextButton.textContent = 'Next Question';
             nextButton.addEventListener('click', function () {
                 correctionElement.remove();
-                displayQuestion();
                 currentQuestionIndex++;
+                displayQuestion();
                 submit.disabled = false
             });
 
