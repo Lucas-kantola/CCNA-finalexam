@@ -51,6 +51,18 @@ h1{
     cursor: pointer;
 }
 
+.options label:has(.correct) {
+    color: #4caf50;
+}
+.options label:has(.correct)::after {
+    content: '✅';
+    margin-left: 0.25em;
+}
+
+.options label:has(.wrong) {
+    color: #f44336;
+}
+
 .options label:has(input:disabled) {
     cursor: inherit;
 }
