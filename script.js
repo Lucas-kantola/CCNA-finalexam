@@ -1,11 +1,14 @@
 document.addEventListener("DOMContentLoaded", function () {
-    const questions = extractQuestions();
-    createQuiz(questions);
+    extractQuestions().then(questions => {
+        createQuiz(questions);
+    });
 
-    function extractQuestions() {
+    async function extractQuestions() {
+        const text = await fetch('questions.html').then(res => res.text());
+        const questionsDocument = new DOMParser().parseFromString(text.toString() ?? '', 'text/html');
+        const questionContainers = questionsDocument.querySelectorAll('#questions > p');
+
         const questions = [];
-        const questionContainers = document.querySelectorAll('.thecontent > p');
-
         questionContainers.forEach((questionContainer) => {
             const questionTextElement = questionContainer.querySelector('strong');
             if (!questionTextElement) {
