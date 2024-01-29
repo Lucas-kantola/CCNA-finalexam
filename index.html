@@ -18,10 +18,17 @@
     body {
         font-family: 'Roboto', sans-serif;
         display: flex;
+        flex-direction: column;
         align-items: center;
         justify-content: center;
         min-height: 100vh;
         margin: 0;
+    }
+    h1{
+        text-align: center;
+        position: absolute;
+        top: 0;
+        color: rgb(255, 30, 30);
     }
 
     #quiz-container {
@@ -81,7 +88,7 @@
 </style>
 
 <body>
-
+    <h1>Det finns frågor som inte kommer att fungera. Ladda om sidan om ni stöter på en sådan.</h1>
     <div id="quiz-container"></div>
 
     <div class="hide">
@@ -2360,27 +2367,6 @@
                                             hosts in it so the subnet mask must have at least 7 host bits in it
                                             (27-2=126). 255.255.255.0 has 8 hosts bits, but this does not meet the
                                             requirement of providing the maximum number of subnets.</p>
-                                    </div>
-                                    <p><strong>151. A network administrator wants to have the same subnet mask for three
-                                            subnetworks at a small site. The site has the following networks and numbers
-                                            of devices:</strong></p>
-                                    <pre>Subnetwork A: IP phones – 10 addresses
-Subnetwork B: PCs – 8 addresses
-Subnetwork C: Printers – 2 addresses</pre>
-                                    <p><strong>What single subnet mask would be appropriate to use for the three
-                                            subnetworks?</strong></p>
-                                    <ul>
-                                        <li>255.255.255.0</li>
-                                        <li><span style="color: #ff0000;"><strong>255.255.255.240</strong></span></li>
-                                        <li>255.255.255.248</li>
-                                        <li>255.255.255.252</li>
-                                    </ul>
-                                    <div class="message_box success">
-                                        <p><strong>Explain:</strong><br>
-                                            If the same mask is to be used, then the network with the most hosts must be
-                                            examined for number of hosts. Because this is 10 hosts, 4 host bits are
-                                            needed. The /28 or 255.255.255.240 subnet mask would be appropriate to use
-                                            for these networks. ​</p>
                                     </div>
                                     <p><strong>152. Match each item to the type of topology diagram on which it is
                                             typically identified. (Not all options are used.)</strong><br>
