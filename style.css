@@ -48,6 +48,11 @@ h1{
 .options label {
     display: block;
     margin-bottom: 10px;
+    cursor: pointer;
+}
+
+.options label:has(input:disabled) {
+    cursor: inherit;
 }
 
 .options input {
@@ -68,7 +73,9 @@ button:hover {
     background-color: #45a049;
 }
 button:disabled{
-    filter: brightness(75%);
+    color: #555;
+    background-color: #ddd;
+    cursor: inherit;
 }
 
 .correction {

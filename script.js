@@ -77,6 +77,7 @@ document.addEventListener("DOMContentLoaded", function () {
             });
 
             const optionsListElement = document.createElement('ul');
+            optionsListElement.classList.add('options');
             const isMultipleCorrect = question.correctAnswers.length > 1;
 
             question.options.forEach((option, index) => {
@@ -119,13 +120,17 @@ document.addEventListener("DOMContentLoaded", function () {
             if (selectedAnswer && question.correctAnswers.includes(selectedAnswer)) {
                 correctionElement.textContent = 'Correct!';
                 correctionElement.style.color = '#4caf50';
-                submit.disabled = true
             } else {
-                correctionElement.textContent = 'Incorrect. The correct answers are: ' + question.correctAnswers.join(', ');
+                correctionElement.textContent = question.correctAnswers.length == 1
+                    ? 'Incorrect. The correct answer is: ' + question.correctAnswers[0]
+                    : 'Incorrect. The correct answers are: ' + question.correctAnswers.join(', ');
                 correctionElement.style.color = '#f44336';
                 correctionElement.style.margin = "10px"
-                submit.disabled = true
             }
+            submit.disabled = true;
+            document.querySelectorAll('input[name="options"]').forEach(option => {
+                option.disabled = true
+            });
 
             quizContainer.appendChild(correctionElement);
 
@@ -135,7 +140,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 correctionElement.remove();
                 currentQuestionIndex++;
                 displayQuestion();
-                submit.disabled = false
             });
 
             quizContainer.appendChild(nextButton);
