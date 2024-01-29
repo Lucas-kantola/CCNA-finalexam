@@ -37,7 +37,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 const optionText = optionElement.textContent.trim();
                 options.push(optionText);
 
-                if (optionElement.querySelector('span[style="color: #ff0000;"]')) {
+                if (optionElement.querySelector('span[correctOption]')) {
                     correctAnswers.push(optionText);
                 }
             });
