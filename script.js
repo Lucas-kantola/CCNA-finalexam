@@ -42,11 +42,19 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
             });
 
+            var explanation = undefined
+            const explanationDiv = ulElement.nextElementSibling;
+            if (explanationDiv?.className.match('message_box')) {
+                const explanationElement = explanationDiv.querySelector('p')
+                explanation = explanationElement?.textContent?.replace(/\n/g, ' ')?.replace(/ {2,}/g, ' ')?.trim()
+            }
+
             const question = {
                 text: questionText,
                 images: images,
                 options: options,
-                correctAnswers: correctAnswers
+                correctAnswers: correctAnswers,
+                explanation: explanation,
             };
 
             questions.push(question);
@@ -126,6 +134,10 @@ document.addEventListener("DOMContentLoaded", function () {
                     : 'Incorrect. The correct answers are: ' + question.correctAnswers.join(', ');
                 correctionElement.style.color = '#f44336';
                 correctionElement.style.margin = "10px"
+            }
+            if (question.explanation) {
+                correctionElement.innerHTML += '<br><br>'
+                correctionElement.innerHTML += question.explanation
             }
             const options = document.querySelectorAll('input[name="options"]');
             options.forEach(el => {
